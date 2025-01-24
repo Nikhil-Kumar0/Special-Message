@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> Special Message</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff69b4;
+            --secondary: #ff1493;
+            --accent: #ff8cc6;
+            --bg-start: #ffe6f2;
+            --bg-end: #ffb3d9;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rose-container {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            z-index: 100;
+        }
+
+        .rose {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .petal {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, var(--primary), var(--secondary));
+            border-radius: 50% 0 50% 0;
+            transform-origin: bottom right;
+            animation: floating 3s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(225, 105, 180, 0.3);
+        }
+
+        .butterfly {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+            animation: flutter 8s infinite;
+        }
+
+        @keyframes flutter {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -50px) rotate(20deg); }
+            50% { transform: translate(200px, 0) rotate(-20deg); }
+            75% { transform: translate(100px, 50px) rotate(20deg); }
+        }
+
+
+         /* New falling hearts animation */
+         .heart {
+            position: fixed;
+            pointer-events: none;
+            animation: fallDown 10s linear infinite;
+            color: var(--heart-color);
+            opacity: 0.6;
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .message-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            text-align: center;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            max-width: 80%;
+            width: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        .message-container.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .title {
+            font-family: 'Great Vibes', cursive;
+            color: var(--secondary);
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.3s;
+        }
+
+        .message-container.visible .message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.7rem;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(225, 225, 225, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: glowing 2s infinite;
+        }
+
+        @keyframes glowing {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
+        }
+
+        .button:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            animation: sparkle 1.5s linear forwards;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        .love-meter {
+            width: 200px;
+            height: 20px;
+            background: #ffebf3;
+            border-radius: 10px;
+            margin: 1rem auto;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .love-meter-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .love-meter-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.1) 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(8deg); }
+        }
+
+         /* Mobile responsive styles */
+         @media (max-width: 768px) {
+            .message-container {
+                width: 90%;
+                padding: 1.5rem;
+                margin: 10px;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .message {
+                font-size: 1.1rem;
+            }
+
+            .button {
+                padding: 0.8rem 1.8rem;
+                font-size: 1rem;
+                margin: 0.5rem;
+            }
+
+            
+            .rose {
+                width: 80px;
+                height: 80px;
+            }
+
+            .petal {
+                width: 35px;
+                height: 35px;
+            }
+
+            .music-player {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px;
+            }
+
+            .love-meter {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .filter-selector {
+                width: 90%;
+                margin: 10px auto;
+            }
+
+            #photoPreview {
+                width: 90%;
+                height: auto;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) {
+            .button:hover {
+                transform: none;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="rose-container">
+            <div class="rose">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+            </div>
+        </div>
+        <div class="message-container">
+            <h1 class="title">My Dear Friend</h1>
+            <div class="love-meter">
+                <div class="love-meter-fill"></div>
+            </div>
+            <p class="message">
+                In the garden of friendship, you're the most beautiful rose. 
+                Your kindness blooms in every season, your laughter brightens my darkest days, 
+                and your support gives me strength to grow. Thank you for being the amazing friend 
+                that you are. Let's continue growing together! 🌹✨
+            </p>
+            <button class="button" id="send-love">Send Love</button>
+            <button class="button" id="reset">New Beginning</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rose = document.querySelector('.rose-container');
+            const messageContainer = document.querySelector('.message-container');
+            const loveMeter = document.querySelector('.love-meter-fill');
+            let isMessageVisible = false;
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+            let loveLevel = 0;
+
+           
+
+            // Butterflies
+            function createButterfly() {
+                const butterfly = document.createElement('div');
+                butterfly.classList.add('butterfly');
+                butterfly.innerHTML = '🦋' , '❤️';
+                butterfly.style.left = Math.random() * window.innerWidth + 'px';
+                butterfly.style.top = Math.random() * window.innerHeight + 'px';
+                document.body.appendChild(butterfly);
+
+                setTimeout(() => butterfly.remove(), 8000);
+            }
+            
+
+            // Enhanced sparkle effect
+            function createSparkle(x, y) {
+                const sparkles = ['✨', '💫', '⭐'];
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.innerHTML = sparkles[Math.floor(Math.random()* sparkles.length)];
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                sparkle.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                document.body.appendChild(sparkle);
+
+                setTimeout(() => sparkle.remove(), 1500);
+            }
+
+            function updateLoveMeter() {
+                loveLevel = Math.min(loveLevel + 10, 100);
+                loveMeter.style.width = loveLevel + '%';
+                
+                if (loveLevel === 100) {
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(createButterfly, i * 300);
+                        setTimeout(createHeart, i * 300);
+                    }
+                    loveLevel = 0;
+                    setTimeout(() => {
+                        loveMeter.style.width = '0%';
+                    }, 1000);
+                }
+            }
+
+            // Touch event handlers
+            rose.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                initialX = touch.clientX - xOffset;
+                initialY = touch.clientY - yOffset;
+                if (e.target.closest('.rose-container')) {
+                    isDragging = true;
+                }
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    currentX = touch.clientX - initialX;
+                    currentY = touch.clientY - initialY;
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    setTranslate(currentX, currentY, rose);
+                    createSparkle(touch.clientX, touch.clientY);
+                }
+            });
+
+            document.addEventListener('touchend', () => {
+                isDragging = false;
+                if (!isMessageVisible) {
+                    showMessage();
+                }
+                updateLoveMeter();
+            });
+
+            // Original event listeners....
+            rose.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                if (e.target.closest('.rose-container')) {
+                    isDragging = true;
+                }
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    setTranslate(currentX, currentY, rose);
+                    createSparkle(e.clientX, e.clientY);
+                }
+            }
+
+            function dragEnd() {
+                isDragging = false;
+                if (!isMessageVisible) {
+                    showMessage();
+                }
+                updateLoveMeter();
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate(${xPos}px, ${yPos}px) rotate(${xPos * 0.05}deg)`;
+            }
+
+            function showMessage() {
+                messageContainer.classList.add('visible');
+                isMessageVisible = true;
+                createButterfly();
+                createHeart();
+            }
+
+            document.getElementById('send-love').addEventListener('click', () => {
+                updateLoveMeter();
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(createButterfly, i * 200);
+                    setInterval(createHeart, i * 200);
+                }
+            });
+
+            document.getElementById('reset').addEventListener('click', () => {
+                messageContainer.classList.remove('visible');
+                isMessageVisible = false;
+                xOffset = 0;
+                yOffset = 0;
+                setTranslate(0, 0, rose);
+                loveLevel = 0;
+                loveMeter.style.width = '0%';
+            });
+
+            // Initial butterfly
+            createButterfly();
+            createHeart();
+        });
+    </script>
+</body>
+</html>
